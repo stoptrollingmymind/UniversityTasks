@@ -38,7 +38,7 @@ def list_y_function(foo, list_x, y: float = 0):
     list_y.append(y)
 
     if foo == improved_eulers_method_3:
-        y = y + delta_x / (interval_start + 2 * y)
+        y = y + delta_x * real_function(interval_start, y)
         list_y.append(y)
         for i in range(2, steps):
             y = foo(list_x[i-1], list_y[i-1], list_y[i-2])
