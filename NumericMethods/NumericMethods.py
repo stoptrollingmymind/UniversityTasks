@@ -1,82 +1,75 @@
 import matplotlib.pyplot as plt
+import numpy as np
 
-
+interval_start = -1
+interval_end = 1
 delta_x = 0.1
-y = 0
-x = -1
-list_x1 = []
-list_y1 = []
-list_x1.insert(0, x)
-list_y1.insert(0, y)
-x = x + delta_x
-y = y + delta_x / (x + 2 * y)
-list_x1.insert(1, x)
-list_y1.insert(1, y)
-
-for i in range(2, 21):
-    x = x + delta_x
-    x = round(x, 3)
-    y = list_y1[i-2] + 2*delta_x/(list_x1[i-1]+2*list_y1[i-1])
-    y = round(y, 3)
-    list_x1.insert(i, x)
-    list_y1.insert(i, y)
-print(str(list_x1), '\n', str(list_y1))
-plt.plot(list_x1, list_y1)
-plt.show()
-
-y = 0
-x = -1
-list_x2 = []
-list_y2 = []
-list_x2.insert(0, x)
-list_y2.insert(0, y)
-
-for i in range(1, 21):
-    x = x + delta_x
-    x = round(x, 3)
-    y = list_y2[i-1] + delta_x / ((list_x2[i-1]+delta_x/2) + 2 * (list_y2[i-1] +
-                                                                  delta_x / 2 / (list_y2[i-1] * 2+list_x2[i-1])))
-    y = round(y, 3)
-    list_x2.insert(i, x)
-    list_y2.insert(i, y)
-
-y = 0
-x = -1
-list_x2 = []
-list_y2 = []
-list_x2.insert(0, x)
-list_y2.insert(0, y)
-
-for i in range(1, 21):
-    x = x + delta_x
-    x = round(x, 3)
-    y = list_y2[i-1] + delta_x / ((list_x2[i-1]+delta_x/2) + 2 * (list_y2[i-1] +
-                                                                  delta_x / 2 / (list_y2[i-1] * 2+list_x2[i-1])))
-    y = round(y, 3)
-    list_x2.insert(i, x)
-    list_y2.insert(i, y)
-
-y = 0
-x = -1
-list_x3 = []
-list_y3 = []
-list_x3.insert(0, x)
-list_y3.insert(0, y)
-
-for i in range(1, 21):
-    x = x + delta_x
-    x = round(x, 3)
-    y = list_y3[i-1] + delta_x / ((list_x3[i-1]+delta_x/2) + 2 * (list_y3[i-1] +
-                                                                  delta_x / 2 / (list_y3[i-1] * 2+list_x3[i-1])))
-    y = round(y, 3)
-    list_x3.insert(i, x)
-    list_y3.insert(i, y)
+steps = int(2/delta_x+1)
 
 
-print(str(list_x1), '\n', str(list_y1))
-plt.plot(list_x1, list_y1)
-plt.show()
-plt.plot(list_x2, list_y2)
-plt.show()
-plt.plot(list_x3, list_y3)
-plt.show()
+def real_function(x: float, y: float):
+    return 1 / (x + 2 * y)
+
+
+def eulers_method(x_previous, y_previous):
+    y = y_previous + delta_x * real_function(x_previous, y_previous)
+    return y
+
+
+def improved_eulers_method_1(x_previous, y_previous):
+    y = y_previous + delta_x * real_function(x_previous+delta_x/2, y_previous + delta_x/2
+                                             * real_function(x_previous,y_previous))
+    return y
+
+
+def improved_eulers_method_2(x_previous, y_previous):
+    y = y_previous + delta_x / 2 * (real_function(x_previous, y_previous) +
+            real_function(x_previous + delta_x, y_previous + delta_x * real_function(x_previous, y_previous)))
+    return y
+
+
+def improved_eulers_method_3(x_previous, y_previous, y_previous_previous):
+    y = y_previous_previous + 2 * delta_x * real_function(x_previous, y_previous)
+    return y
+
+
+def list_y_function(foo, list_x, y: float = 0):
+    list_y = []
+    list_y.append(y)
+
+    if foo == improved_eulers_method_3:
+        y = y + delta_x / (interval_start + 2 * y)
+        list_y.append(y)
+        for i in range(2, steps):
+            y = foo(list_x[i-1], list_y[i-1], list_y[i-2])
+            list_y.append(y)
+
+    else:
+        for i in range(1, steps):
+            y = foo(list_x[i - 1], list_y[i - 1])
+            list_y.append(y)
+
+    return list_y
+
+
+def render_drawing_num_methods():
+    x = np.linspace(interval_start, interval_end, steps)
+
+    y = list_y_function(eulers_method, x)
+    plt.plot(x, y, label='eulers_method')
+
+    y = list_y_function(improved_eulers_method_1, x)
+    plt.plot(x, y, label='improved_eulers_method_1')
+
+    y = list_y_function(improved_eulers_method_2, x)
+    plt.plot(x, y, label='improved_eulers_method_2')
+
+    y = list_y_function(improved_eulers_method_3, x)
+    plt.plot(x, y, label='improved_eulers_method_3')
+
+    plt.legend()
+    plt.show()
+
+
+if __name__ == '__main__':
+    render_drawing_num_methods()
