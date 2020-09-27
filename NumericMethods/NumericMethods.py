@@ -4,7 +4,7 @@ import numpy as np
 interval_start = -1
 interval_end = 1
 delta_x = 0.1
-steps = int(2/delta_x+1)
+steps = int((interval_end - interval_start)/delta_x+1)
 
 
 def real_function(x: float, y: float):
