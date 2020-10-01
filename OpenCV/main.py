@@ -30,8 +30,12 @@ for i in range(0, width2):
     for j in range(0, height2):
         clone1[j, i] = 0
 
+cv2.compare(g, clone1, clone2, cv2.CMP_GE)                  # (e)
+
+difference = cv2.subtract(g, thresh/2, g, clone2)   # Subtracting image and showing results (f)
+cv2.imshow('difference', difference)
+
 cv2.imshow('WHAT THE FUCK IS THIS DUUUDE', clone1)
 
 cv2.waitKey(0)
-
 
