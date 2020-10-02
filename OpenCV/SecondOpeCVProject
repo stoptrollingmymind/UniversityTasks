@@ -1,0 +1,28 @@
+import numpy as np
+import cv2
+from numpy import linalg as LA
+
+
+# a starts
+matrix = np.array([[21, 0, -2], [0, 21, 0], [-2, 0, 21]])
+
+transposed_matrix = matrix.transpose()
+
+final_matrix = transposed_matrix * matrix
+
+eigenvalue, eigenvector = LA.eigh(final_matrix)
+
+print('eigenvalues:\n', eigenvalue,'\neigenvectors:\n', eigenvector)
+
+singular_values = np.sqrt(eigenvalue)
+
+print('singular_values:\n', singular_values)
+# a ends
+
+# b starts
+matrix_V = np.array([[eigenvector[0]], [eigenvector[1]], [eigenvector[2]]])
+print(matrix_V)
+
+Vector_U1 = 1/singular_values[0] * final_matrix * eigenvector[0]
+Vector_U2 = 1/singular_values[1] * final_matrix * eigenvector[1]
+print('Vector_U1:\n',Vector_U1, '\nVector_U2:\n', Vector_U2)
