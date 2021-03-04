@@ -4,7 +4,7 @@ import math
 steps = 1000000
 
 
-def rectangle_method(start: float, end: float, f):
+def left_rectangle_method(start: float, end: float, f):
     step = abs(end - start) / steps
     x = start
     sum = 0
