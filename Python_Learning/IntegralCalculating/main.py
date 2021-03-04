@@ -45,4 +45,4 @@ def integral(start: float, end: float, calculating_method, f):
 if __name__ == '__main__':
     print(integral(0, math.pi * 2, simpsons_method, math.cos))
     print(integral(0, math.pi * 2, trapezium_method, math.cos))
-    print(integral(0, math.pi * 2, rectangle_method, math.cos))
+    print(integral(0, math.pi * 2, left_rectangle_method, math.cos))
